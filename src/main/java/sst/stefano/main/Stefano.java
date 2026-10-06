@@ -33,6 +33,7 @@ public class Stefano extends Application {
     private static final int LEFT = 0;
 
     private static final Logger logger = LoggerFactory.getLogger(Stefano.class);
+    public static final int MAX_LAST_WORD_LIST = 12;
 
     private final Label fromLabel = new Label("Français");
     private final Label toLabel = new Label("Italien");
@@ -342,7 +343,7 @@ public class Stefano extends Application {
     private void updateLastWords() {
         int index = lastFiveWordsList.indexOf(currentWord);
         try {
-            lastFiveWordsList.remove((-1 == index) ? 9 : index);
+            lastFiveWordsList.remove((-1 == index) ? MAX_LAST_WORD_LIST : index);
         } catch (IndexOutOfBoundsException e) {
             // nothig to do
         }
