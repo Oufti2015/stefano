@@ -155,8 +155,8 @@ public class Stefano extends Application {
 
         grid.add(new Separator(), LEFT, i++, 2, 1);
 
-        addLine(grid, i++, StefanoConstants.NOMBRE_D_EXERCICES, configureStatLabel(exercicesLabel));
-        addLine(grid, i++, StefanoConstants.SUCCES, configureStatLabel(successLabel));
+        addLine(grid, i++, StefanoConstants.EXERCISES_COUNT, configureStatLabel(exercicesLabel));
+        addLine(grid, i++, StefanoConstants.SUCCESS, configureStatLabel(successLabel));
         addLine(grid, i++, StefanoConstants.FAILED, configureStatLabel(failedLabel));
         addLine(grid, i++, StefanoConstants.AVERAGE, configureStatLabel(averageLabel));
         addLine(grid, i++, "Suite", configureStatLabel(currentStraightLabel));

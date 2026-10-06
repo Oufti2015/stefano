@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>sst.stefano</groupId>
 	<artifactId>stefano</artifactId>
-	<version>2026.002</version>
+	<version>2026.003</version>
 	<name>SST Stefano</name>
 	<description>SST Italian Vocabulary Exercise JavaFX Application</description>
 

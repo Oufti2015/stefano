@@ -4,13 +4,12 @@ import sst.stefano.data.Word;
 
 public class SimpleWordSelector extends WordSelector {
 
-    public SimpleWordSelector(double exerciceAvg, double successAvg) {
-        super(exerciceAvg, successAvg);
+    public SimpleWordSelector(double exerciseAvg, double successAvg) {
+        super(exerciseAvg, successAvg);
     }
 
     @Override
-    public boolean isWordUnkown(Word word) {
-        return ((word.getSuccess() + 2) < exerciceAvg);
+    public boolean isWordUnknown(Word word) {
+        return ((word.getSuccess() + 2) < exerciseAvg);
     }
-
 }

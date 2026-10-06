@@ -1,30 +1,27 @@
 package sst.stefano.data;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sst.stefano.data.filters.ClassicWordFilter;
+import sst.stefano.data.filters.HundredFirstRareWordsFilter;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import sst.stefano.data.filters.ClassicWordFilter;
-import sst.stefano.data.filters.HundredFirstRareWordsFilter;
-
 public class WordList {
     private static final int SPECIAL_WORD = 5;
 
-    private static Logger logger = LoggerFactory.getLogger(WordList.class);
-
-    private HashMap<Integer, Word> list = new HashMap<>();
+    private static final Logger logger = LoggerFactory.getLogger(WordList.class);
+    private static final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+    private final HashMap<Integer, Word> list = new HashMap<>();
+    private final ArrayList<String> frenchList = new ArrayList<>();
+    private final ArrayList<String> italianList = new ArrayList<>();
     private HashMap<Integer, Word> unknownWordList = new HashMap<>();
     private HashMap<Integer, Word> knownWordList = new HashMap<>();
-    private ArrayList<String> frenchList = new ArrayList<>();
-    private ArrayList<String> italianList = new ArrayList<>();
-    private static final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
     private Word currentWord = null;
     @Getter
     private int used = 0, failed = 0, success = 0;
@@ -35,7 +32,7 @@ public class WordList {
 
     public void addWord(Word word) {
         if (checkForDuplicate(word)) {
-            list.put(Integer.valueOf(getWordsListSize() + 1), word);
+            list.put(getWordsListSize() + 1, word);
             frenchList.add(word.getFrancais());
             italianList.add(word.getItalien());
         }
@@ -43,7 +40,7 @@ public class WordList {
 
     private boolean checkForDuplicate(Word word) {
         if (frenchList.contains(word.getFrancais()) || italianList.contains(word.getItalien())) {
-            logger.warn("Word <" + word + "> is duplicate.");
+            logger.warn("Word <{}> is duplicate.", word);
             return false;
         }
         return true;
@@ -52,22 +49,22 @@ public class WordList {
     public Word random() {
         filterWords();
 
-        Integer j = Integer.valueOf((((int) (Math.random() * 1000)) % 10) + 1);
+        int j = (((int) (Math.random() * 1000)) % 10) + 1;
 
         if (null == currentWord && 1 == getUnknownWordsListSize() && unknownWordList.containsValue(currentWord)) {
             j = SPECIAL_WORD;
         }
 
         if (SPECIAL_WORD == j) {
-            Integer i = Integer.valueOf((((int) (Math.random() * 1000)) % knownWordList.size()) + 1);
+            Integer i = (((int) (Math.random() * 1000)) % knownWordList.size()) + 1;
             currentWord = knownWordList.get(i);
             logger.info("******** SPECIAL WORD ********");
             currentWord.setSpecialWord(true);
         } else if (0 < getUnknownWordsListSize()) {
-            Integer i = Integer.valueOf((((int) (Math.random() * 1000)) % getUnknownWordsListSize()) + 1);
+            Integer i = (((int) (Math.random() * 1000)) % getUnknownWordsListSize()) + 1;
             currentWord = unknownWordList.get(i);
         } else {
-            Integer i = Integer.valueOf((((int) (Math.random() * 1000)) % getWordsListSize()) + 1);
+            Integer i = (((int) (Math.random() * 1000)) % getWordsListSize()) + 1;
             currentWord = list.get(i);
         }
 
@@ -94,20 +91,19 @@ public class WordList {
         unknownWordList = new HashMap<>(list.size());
         knownWordList = new HashMap<>(list.size());
 
-        double exerciceAvg = new ClassicWordFilter().filter(this);
-        if (0 == unknownWordList.size()) {
+        double exerciseAvg = new ClassicWordFilter().filter(this);
+        if (unknownWordList.isEmpty()) {
             new HundredFirstRareWordsFilter().filter(this);
         }
-        logger.info("Average usage = " + decimalFormat.format(exerciceAvg) + " (" + decimalFormat.format(exerciceAvg / 2) + ") / Words in List = " + getWordsListSize() + " / Unknown words in List = "
-                + getUnknownWordsListSize());
+        logger.info("Average usage = {} ({}) / Words in List = {} / Unknown words in List = {}", decimalFormat.format(exerciseAvg), decimalFormat.format(exerciseAvg / 2), getWordsListSize(), getUnknownWordsListSize());
     }
 
     public void addKnownWord(Word word) {
-        knownWordList.put(Integer.valueOf(knownWordList.size() + 1), word);
+        knownWordList.put(knownWordList.size() + 1, word);
     }
 
     public void addUnknownWord(Word word) {
-        unknownWordList.put(Integer.valueOf(getUnknownWordsListSize() + 1), word);
+        unknownWordList.put(getUnknownWordsListSize() + 1, word);
     }
 
     public int getWordsListSize() {

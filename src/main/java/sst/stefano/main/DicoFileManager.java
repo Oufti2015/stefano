@@ -1,29 +1,18 @@
 package sst.stefano.main;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import com.google.common.collect.Ordering;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import sst.stefano.data.Word;
+import sst.stefano.data.WordList;
+
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import sst.stefano.data.Word;
-import sst.stefano.data.WordList;
-
-import com.google.common.collect.Ordering;
 
 public class DicoFileManager {
     private static final Logger logger = LoggerFactory.getLogger(DicoFileManager.class);
@@ -48,7 +37,7 @@ public class DicoFileManager {
                     wordList.addWord(new Word(strLine));
                 } else {
                     // System.out.println("Line ignored = " + strLine);
-                    if (!strLine.startsWith(StefanoConstants.TMSTMP_PREFIXE) && !strLine.startsWith(StefanoConstants.RESULT_PREFIXE) && !strLine.startsWith(StefanoConstants.BEST_STRAIGHT)
+                    if (!strLine.startsWith(StefanoConstants.TMSTMP_PREFIX) && !strLine.startsWith(StefanoConstants.RESULT_PREFIX) && !strLine.startsWith(StefanoConstants.BEST_STRAIGHT)
                             && !strLine.startsWith(StefanoConstants.CURRENT_STRAIGHT)) {
                         if (!strLine.startsWith("#")) {
                             strLine = "#" + strLine;
@@ -67,7 +56,7 @@ public class DicoFileManager {
             // Close the input stream
             inputStreamReader.close();
         } catch (Exception e) {// Catch exception if any
-            logger.error("Cannot load file " + StefanoConstants.getINSTANCE().getDicoFileName(), e);
+            logger.error("Cannot load file {}", StefanoConstants.getINSTANCE().getDicoFileName(), e);
             System.exit(-1);
         }
         return wordList;
@@ -107,26 +96,26 @@ public class DicoFileManager {
             // outputStreamWriter.close();
             bufferedWriter.close();
         } catch (Exception e) {// Catch exception if any
-            logger.error("Cannot save file " + StefanoConstants.getINSTANCE().getDicoFileName(), e);
+            logger.error("Cannot save file {}", StefanoConstants.getINSTANCE().getDicoFileName(), e);
             System.exit(-1);
         }
     }
 
     private void printStat(WordList wordList, BufferedWriter bufferedWriter) throws IOException {
 
-        bufferedWriter.write(StefanoConstants.RESULT_PREFIXE);
+        bufferedWriter.write(StefanoConstants.RESULT_PREFIX);
         bufferedWriter.newLine();
 
-        bufferedWriter.write(StefanoConstants.RESULT_PREFIXE + StefanoConstants.NOMBRE_D_EXERCICES + StefanoConstants.decimalNumberFormat.format(wordList.getUsed()));
+        bufferedWriter.write(StefanoConstants.RESULT_PREFIX + StefanoConstants.EXERCISES_COUNT + StefanoConstants.decimalNumberFormat.format(wordList.getUsed()));
         bufferedWriter.newLine();
-        bufferedWriter.write(StefanoConstants.RESULT_PREFIXE + StefanoConstants.SUCCES + StefanoConstants.decimalNumberFormat.format(wordList.getSuccess()));
+        bufferedWriter.write(StefanoConstants.RESULT_PREFIX + StefanoConstants.SUCCESS + StefanoConstants.decimalNumberFormat.format(wordList.getSuccess()));
         bufferedWriter.newLine();
-        bufferedWriter.write(StefanoConstants.RESULT_PREFIXE + StefanoConstants.FAILED + StefanoConstants.decimalNumberFormat.format(wordList.getFailed()));
+        bufferedWriter.write(StefanoConstants.RESULT_PREFIX + StefanoConstants.FAILED + StefanoConstants.decimalNumberFormat.format(wordList.getFailed()));
         bufferedWriter.newLine();
-        bufferedWriter.write(StefanoConstants.RESULT_PREFIXE + StefanoConstants.AVERAGE + StefanoConstants.calculateAverage(wordList));
+        bufferedWriter.write(StefanoConstants.RESULT_PREFIX + StefanoConstants.AVERAGE + StefanoConstants.calculateAverage(wordList));
         bufferedWriter.newLine();
 
-        bufferedWriter.write(StefanoConstants.RESULT_PREFIXE);
+        bufferedWriter.write(StefanoConstants.RESULT_PREFIX);
         bufferedWriter.newLine();
         bufferedWriter.write(StefanoConstants.BEST_STRAIGHT + " " + wordList.getBestStraight());
         bufferedWriter.newLine();
@@ -135,7 +124,7 @@ public class DicoFileManager {
     }
 
     private void printTmsTmp(BufferedWriter bufferedWriter) throws IOException {
-        bufferedWriter.write(StefanoConstants.TMSTMP_PREFIXE + StefanoConstants.dateFormat.format(new Date()));
+        bufferedWriter.write(StefanoConstants.TMSTMP_PREFIX + StefanoConstants.dateFormat.format(new Date()));
         bufferedWriter.newLine();
     }
 

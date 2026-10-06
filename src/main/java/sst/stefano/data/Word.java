@@ -1,10 +1,10 @@
 package sst.stefano.data;
 
-import java.util.StringTokenizer;
-
 import lombok.Getter;
 import lombok.Setter;
 import sst.stefano.main.StefanoConstants;
+
+import java.util.StringTokenizer;
 
 public class Word {
     @Getter
@@ -85,7 +85,7 @@ public class Word {
 
     public String getWordStat() {
         double stat = getStat();
-        return "" + used + " (" + straight + ") - " + StefanoConstants.decimalPercentFormat.format(stat);
+        return used + " (" + straight + ") - " + StefanoConstants.decimalPercentFormat.format(stat);
     }
 
     public double getStat() {

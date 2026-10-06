@@ -4,14 +4,14 @@ import sst.stefano.data.Word;
 
 public abstract class WordSelector {
 
-    protected double exerciceAvg = 0.0;
-    protected double successAvg = 0.0;
+    protected final double exerciseAvg;
+    protected final double successAvg;
 
-    public WordSelector(double exerciceAvg, double successAvg) {
+    public WordSelector(double exerciseAvg, double successAvg) {
         super();
-        this.exerciceAvg = exerciceAvg;
+        this.exerciseAvg = exerciseAvg;
         this.successAvg = successAvg;
     }
 
-    public abstract boolean isWordUnkown(Word word);
+    public abstract boolean isWordUnknown(Word word);
 }
