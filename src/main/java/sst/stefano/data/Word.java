@@ -73,7 +73,7 @@ public class Word {
     public void success() {
         success++;
         straight++;
-        if (StefanoConstants.getInstance().getStraightPivot() < straight && failed > 0) {
+        if (StefanoConstants.getINSTANCE().getStraightPivot() < straight && failed > 0) {
             failed--;
             success++;
         }

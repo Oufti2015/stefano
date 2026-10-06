@@ -1,0 +1,49 @@
+.root {
+	-fx-font-size: 12pt;
+	-fx-font-family: "Verdana";
+	-fx-base: rgb(214, 222, 154);
+	-fx-background: rgb(210, 215, 179);
+}
+
+#stat-label {
+	-fx-font: 12pt "Courier New";
+	-fx-text-alignment: right;
+	-fx-alignment: top-right;
+	-fx-content-display: right;
+}
+
+#result-textfield {
+	-fx-font: bold italic 14pt "Verdana";
+	-fx-text-fill: rgb(0, 0, 0);
+}
+
+#result-textfield-ok {
+	-fx-font: bold 14pt "Verdana";
+	-fx-base: rgb(0, 170, 0);
+	-fx-text-fill: rgb(0, 128, 0);
+	-fx-opacity: 1;
+}
+
+#result-textfield-failed {
+	-fx-font: bold 14pt "Verdana";
+	-fx-text-fill: rgb(255, 0, 0);
+}
+
+#progress-indicator {
+	-fx-progress-color: rgb(214, 222, 154);
+}
+
+#input-textfield {
+	-fx-font: bold 16pt "Verdana";
+	-fx-text-fill: rgb(0, 0, 80);
+}
+
+#from-label {
+	-fx-font: bold 16pt "Verdana";
+	-fx-text-fill: rgb(0, 80, 0);
+}
+
+#from-special-label {
+	-fx-font: bold italic 18pt "Verdana";
+	-fx-text-fill: rgb(80, 80, 0);
+}

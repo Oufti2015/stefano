@@ -1,27 +1,14 @@
 package sst.stefano.main;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.Separator;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -29,12 +16,15 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import sst.stefano.data.Word;
 import sst.stefano.data.WordList;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Objects;
 
 public class Stefano extends Application {
 
@@ -42,42 +32,42 @@ public class Stefano extends Application {
 
     private static final int LEFT = 0;
 
-    private static Logger logger = LoggerFactory.getLogger(Stefano.class);
+    private static final Logger logger = LoggerFactory.getLogger(Stefano.class);
 
-    private Label fromLabel = new Label("Français");
-    private Label toLabel = new Label("Italien");
-    private Label resultLabel = new Label("");
-    private Label fromTextLabel = new Label();
-    private TextField toTextField = new TextField();
-    private Label fromSolutionLabel = new Label();
-    private Label yourAnswerLabel = new Label();
-    private Label toSolutionLabel = new Label();
-    private Label exercicesLabel = new Label();
-    private Label successLabel = new Label();
-    private Label failedLabel = new Label();
-    private Label averageLabel = new Label();
-    private Label wordStatLabel = new Label();
-    private Label prevWordStatLabel = new Label();
-    private Label currentStraightLabel = new Label();
-    private Label bestStraightLabel = new Label();
+    private final Label fromLabel = new Label("Français");
+    private final Label toLabel = new Label("Italien");
+    private final Label resultLabel = new Label("");
+    private final Label fromTextLabel = new Label();
+    private final TextField toTextField = new TextField();
+    private final Label fromSolutionLabel = new Label();
+    private final Label yourAnswerLabel = new Label();
+    private final Label toSolutionLabel = new Label();
+    private final Label exercicesLabel = new Label();
+    private final Label successLabel = new Label();
+    private final Label failedLabel = new Label();
+    private final Label averageLabel = new Label();
+    private final Label wordStatLabel = new Label();
+    private final Label prevWordStatLabel = new Label();
+    private final Label currentStraightLabel = new Label();
+    private final Label bestStraightLabel = new Label();
 
-    private Button checkButton = new Button("Vérifier");
+    private final Button checkButton = new Button("Vérifier");
 
-    private Label wordsInDicoLabel = new Label();
-    private ProgressIndicator progressBar = new ProgressIndicator();
-    private Label unknownWordsInDico = new Label();
+    private final Label wordsInDicoLabel = new Label();
+    private final ProgressIndicator progressBar = new ProgressIndicator();
+    private final Label unknownWordsInDico = new Label();
 
     private WordList wordList = new WordList();
     private Word currentWord = null;
 
-    private DicoFileManager dicoFileManager = new DicoFileManager();
+    private final DicoFileManager dicoFileManager = new DicoFileManager();
 
     private boolean proposeSameWord = false;
 
     private ObservableList<Word> lastFiveWordsList = null;
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         int windowWidth = 800;
         int windowHeight = 1024;
 
@@ -102,7 +92,7 @@ public class Stefano extends Application {
         primaryStage.setScene(scene);
 
         // scene.getStylesheets().add("stefano.css");
-        scene.getStylesheets().add(Stefano.class.getResource("stefano.css").toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(Stefano.class.getResource("stefano.css")).toExternalForm());
 
         init(grid);
 
@@ -112,7 +102,7 @@ public class Stefano extends Application {
         proposeAWord();
     }
 
-    private void configureLogger() throws IOException {
+    private void configureLogger() {
         // Handler handler = new FileHandler("logs/Stefano.log.%g", 1024 * 1024
         // * 1024, 10, true);
         // handler.setFormatter(new SimpleFormatter());
@@ -137,18 +127,11 @@ public class Stefano extends Application {
 
         createGrid(grid);
 
-        checkButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                check();
-            }
-        });
+        checkButton.setOnAction(e -> check());
 
-        toTextField.addEventFilter(KeyEvent.KEY_TYPED, new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent t) {
-                if ("\r".equals(t.getCharacter())) {
-                    check();
-                }
+        toTextField.addEventFilter(KeyEvent.KEY_TYPED, t -> {
+            if ("\r".equals(t.getCharacter())) {
+                check();
             }
         });
 
@@ -280,7 +263,7 @@ public class Stefano extends Application {
     }
 
     private void proposeAWord() {
-        Word newWord = null;
+        Word newWord;
         if (null == currentWord || !proposeSameWord) {
             do {
                 newWord = wordList.random();
@@ -295,7 +278,7 @@ public class Stefano extends Application {
         }
         fromTextLabel.setText(currentWord.getFrancais());
         initToTextField(currentWord.getItalien());
-        wordStatLabel.setText("" + currentWord.getWordStat());
+        wordStatLabel.setText(currentWord.getWordStat());
         updateProgressBar();
         proposeSameWord = false;
 
@@ -367,7 +350,9 @@ public class Stefano extends Application {
     }
 
     /**
-     * @param args
+     * The main entry point for the application.
+     *
+     * @param args The command-line arguments.
      */
     public static void main(String[] args) {
         launch(args);

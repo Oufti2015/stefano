@@ -26,22 +26,22 @@ import sst.stefano.data.WordList;
 import com.google.common.collect.Ordering;
 
 public class DicoFileManager {
-    private static Logger logger = LoggerFactory.getLogger(DicoFileManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(DicoFileManager.class);
 
-    private ArrayList<String> ignoredLine = new ArrayList<>();
+    private final ArrayList<String> ignoredLine = new ArrayList<>();
 
     public WordList loadFile() {
         WordList wordList = new WordList();
         try {
             backupFile();
 
-            FileInputStream fileInputStream = new FileInputStream(new File(StefanoConstants.getInstance().getDicoFileName()));
+            FileInputStream fileInputStream = new FileInputStream(StefanoConstants.getINSTANCE().getDicoFileName());
             DataInputStream dataInputStream = new DataInputStream(fileInputStream);
             InputStreamReader inputStreamReader = new InputStreamReader(dataInputStream, StandardCharsets.UTF_8);
 
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
-            String strLine = null;
+            String strLine;
             // Read File Line By Line
             while ((strLine = bufferedReader.readLine()) != null) {
                 if (!strLine.startsWith("#") && strLine.contains("=")) {
@@ -67,22 +67,24 @@ public class DicoFileManager {
             // Close the input stream
             inputStreamReader.close();
         } catch (Exception e) {// Catch exception if any
-            logger.error("Cannot load file " + StefanoConstants.getInstance().getDicoFileName(), e);
+            logger.error("Cannot load file " + StefanoConstants.getINSTANCE().getDicoFileName(), e);
             System.exit(-1);
         }
         return wordList;
     }
 
     public void saveFile(WordList wordList) {
-        Ordering<Word> nameOrdering = new Ordering<Word>() {
+        Ordering<Word> nameOrdering = new Ordering<>() {
             public int compare(Word left, Word right) {
-                return new Double(left.getStat()).compareTo(new Double(right.getStat()));
+                assert left != null;
+                assert right != null;
+                return Double.compare(left.getStat(), right.getStat());
                 // return left.getFrancais().compareTo(right.getFrancais());
             }
         };
 
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(new File(StefanoConstants.getInstance().getDicoFileName()));
+            FileOutputStream fileOutputStream = new FileOutputStream(StefanoConstants.getINSTANCE().getDicoFileName());
             DataOutputStream dataOutputStream = new DataOutputStream(fileOutputStream);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(dataOutputStream, StandardCharsets.UTF_8);
 
@@ -105,7 +107,7 @@ public class DicoFileManager {
             // outputStreamWriter.close();
             bufferedWriter.close();
         } catch (Exception e) {// Catch exception if any
-            logger.error("Cannot save file " + StefanoConstants.getInstance().getDicoFileName(), e);
+            logger.error("Cannot save file " + StefanoConstants.getINSTANCE().getDicoFileName(), e);
             System.exit(-1);
         }
     }
@@ -140,7 +142,7 @@ public class DicoFileManager {
     private void backupFile() throws IOException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
-        String dicoFileName = StefanoConstants.getInstance().getDicoFileName();
+        String dicoFileName = StefanoConstants.getINSTANCE().getDicoFileName();
         File source = new File(dicoFileName);
         File dest = new File(dicoFileName + "." + sdf.format(new Date()));
 
