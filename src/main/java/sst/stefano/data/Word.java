@@ -85,7 +85,7 @@ public class Word {
 
     public String getWordStat() {
         double stat = getStat();
-        return used + " (" + straight + ") - " + StefanoConstants.decimalPercentFormat.format(stat);
+        return StefanoConstants.decimalPercentFormat.format(stat);
     }
 
     public double getStat() {
@@ -94,5 +94,12 @@ public class Word {
 
     public String toString() {
         return francais + "=" + italien + "/" + used + "/" + failed + "/" + success + "/" + straight;
+    }
+
+    public void checkResult() {
+        if (failed > 0 && straight >= StefanoConstants.getINSTANCE().getStraightPivot()) {
+            success = used;
+            failed = 0;
+        }
     }
 }

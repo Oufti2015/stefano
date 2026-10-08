@@ -16,6 +16,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sst.stefano.data.Word;
@@ -28,14 +29,11 @@ import java.util.Objects;
 
 public class Stefano extends Application {
 
+    public static final int MAX_LAST_WORD_LIST = 10;
     private static final int RIGHT = 1;
-
     private static final int LEFT = 0;
-
     private static final Logger logger = LoggerFactory.getLogger(Stefano.class);
-    public static final int MAX_LAST_WORD_LIST = 12;
-
-    private final Label fromLabel = new Label("Français");
+    private final Label fromLabel = new Label("FranÃ§ais");
     private final Label toLabel = new Label("Italien");
     private final Label resultLabel = new Label("");
     private final Label fromTextLabel = new Label();
@@ -52,20 +50,26 @@ public class Stefano extends Application {
     private final Label currentStraightLabel = new Label();
     private final Label bestStraightLabel = new Label();
 
-    private final Button checkButton = new Button("Vérifier");
+    private final Button checkButton = new Button("VÃ©rifier");
 
     private final Label wordsInDicoLabel = new Label();
     private final ProgressIndicator progressBar = new ProgressIndicator();
     private final Label unknownWordsInDico = new Label();
-
+    private final DicoFileManager dicoFileManager = new DicoFileManager();
     private WordList wordList = new WordList();
     private Word currentWord = null;
-
-    private final DicoFileManager dicoFileManager = new DicoFileManager();
-
     private boolean proposeSameWord = false;
 
     private ObservableList<Word> lastFiveWordsList = null;
+
+    /**
+     * The main entry point for the application.
+     *
+     * @param args The command-line arguments.
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage primaryStage) {
@@ -139,6 +143,10 @@ public class Stefano extends Application {
         toTextField.requestFocus();
     }
 
+    // final ObservableList<Word> data =
+    // FXCollections.observableArrayList(wordList.random(), wordList.random(),
+    // wordList.random(), wordList.random(), wordList.random());
+
     private void createGrid(GridPane grid) {
         int i = 0;
 
@@ -149,8 +157,8 @@ public class Stefano extends Application {
         grid.add(new Separator(), LEFT, i++, 2, 1);
 
         addLine(grid, i++, checkButton, resultLabel);
-        addLine(grid, i++, "En français", fromSolutionLabel);
-        addLine(grid, i++, "Votre réponse", yourAnswerLabel);
+        addLine(grid, i++, "En franÃ§ais", fromSolutionLabel);
+        addLine(grid, i++, "Votre rÃ©ponse", yourAnswerLabel);
         addLine(grid, i++, "En italien", toSolutionLabel);
         addLine(grid, i++, "Stat", prevWordStatLabel);
 
@@ -161,7 +169,7 @@ public class Stefano extends Application {
         addLine(grid, i++, StefanoConstants.FAILED, configureStatLabel(failedLabel));
         addLine(grid, i++, StefanoConstants.AVERAGE, configureStatLabel(averageLabel));
         addLine(grid, i++, "Suite", configureStatLabel(currentStraightLabel));
-        addLine(grid, i++, "Meilleur Suite", configureStatLabel(bestStraightLabel));
+        addLine(grid, i++, "Meilleure Suite", configureStatLabel(bestStraightLabel));
 
         Separator sep = new Separator();
         sep.setOrientation(Orientation.VERTICAL);
@@ -174,16 +182,12 @@ public class Stefano extends Application {
         grid.add(createTable(), 0, i, 4, 1);
     }
 
-    // final ObservableList<Word> data =
-    // FXCollections.observableArrayList(wordList.random(), wordList.random(),
-    // wordList.random(), wordList.random(), wordList.random());
-
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private Node createTable() {
         int textWidth = 130, intWidth = 15, percentWidth = 130;
 
         TableColumn francaisCol = new TableColumn();
-        francaisCol.setText("Français");
+        francaisCol.setText("FranÃ§ais");
         francaisCol.setMinWidth(textWidth);
         francaisCol.setCellValueFactory(new PropertyValueFactory("francais"));
 
@@ -193,17 +197,17 @@ public class Stefano extends Application {
         italienCol.setCellValueFactory(new PropertyValueFactory("italien"));
 
         TableColumn usedCol = new TableColumn();
-        usedCol.setText("Joués");
+        usedCol.setText("JouÃ©s");
         usedCol.setMinWidth(intWidth);
         usedCol.setCellValueFactory(new PropertyValueFactory("used"));
 
         TableColumn failedCol = new TableColumn();
-        failedCol.setText("Ratés");
+        failedCol.setText("RatÃ©s");
         failedCol.setMinWidth(intWidth);
         failedCol.setCellValueFactory(new PropertyValueFactory("failed"));
 
         TableColumn successCol = new TableColumn();
-        successCol.setText("Succès");
+        successCol.setText("SuccÃ¨s");
         successCol.setMinWidth(intWidth);
         successCol.setCellValueFactory(new PropertyValueFactory("success"));
 
@@ -212,10 +216,7 @@ public class Stefano extends Application {
         straightCol.setMinWidth(intWidth);
         straightCol.setCellValueFactory(new PropertyValueFactory("straight"));
 
-        TableColumn statCol = new TableColumn();
-        statCol.setText("Stat");
-        statCol.setMinWidth(percentWidth);
-        statCol.setCellValueFactory(new PropertyValueFactory("wordStat"));
+        TableColumn statCol = createStatCol(percentWidth);
 
         lastFiveWordsList = FXCollections.observableArrayList();
         TableView tableView = new TableView();
@@ -224,6 +225,33 @@ public class Stefano extends Application {
 
         tableView.getColumns().addAll(francaisCol, italienCol, usedCol, failedCol, successCol, straightCol, statCol);
         return tableView;
+    }
+
+    private static @NonNull TableColumn createStatCol(int percentWidth) {
+        TableColumn statCol = new TableColumn();
+        statCol.setText("Stat");
+        statCol.setMinWidth(percentWidth);
+        statCol.setCellValueFactory(new PropertyValueFactory("stat"));
+        statCol.setCellFactory(column -> new TableCell<Word, Number>() {
+            private final ProgressBar statProgressBar = new ProgressBar();
+
+            {
+                statProgressBar.setMaxWidth(Double.MAX_VALUE);
+            }
+
+            @Override
+            protected void updateItem(Number stat, boolean empty) {
+                super.updateItem(stat, empty);
+                setText(null);
+                if (empty || stat == null) {
+                    setGraphic(null);
+                } else {
+                    statProgressBar.setProgress(stat.doubleValue());
+                    setGraphic(statProgressBar);
+                }
+            }
+        });
+        return statCol;
     }
 
     private void addLine(GridPane grid, int i, String leftNodeText, Node rightNode) {
@@ -310,10 +338,13 @@ public class Stefano extends Application {
     }
 
     protected void check() {
-        if (currentWord.getItalien().equalsIgnoreCase(toTextField.getText())) {
+        String proposal = toTextField.getText();
+        if (currentWord.getItalien().equalsIgnoreCase(proposal)) {
             resultLabel.setText("OK !");
             resultLabel.setId("result-textfield-ok");
-            wordList.success();
+            wordList.success(!proposal.equalsIgnoreCase(toSolutionLabel.getText()));
+            currentWord.checkResult();
+
             logger.info(" OK     : " + currentWord);
             updateLastWords();
         } else {
@@ -324,7 +355,7 @@ public class Stefano extends Application {
 
             logger.info("ERREUR : " + currentWord);
             logger.info("Solution : " + currentWord.getItalien());
-            logger.info("Answer   : " + toTextField.getText());
+            logger.info("Answer   : " + proposal);
         }
 
         prevWordStatLabel.setText(currentWord.getWordStat());
@@ -333,7 +364,7 @@ public class Stefano extends Application {
 
         fromSolutionLabel.setText(currentWord.getFrancais());
         toSolutionLabel.setText(currentWord.getItalien());
-        yourAnswerLabel.setText(toTextField.getText());
+        yourAnswerLabel.setText(proposal);
 
         dicoFileManager.saveFile(wordList);
 
@@ -348,15 +379,6 @@ public class Stefano extends Application {
             // nothig to do
         }
         lastFiveWordsList.add(0, currentWord);
-    }
-
-    /**
-     * The main entry point for the application.
-     *
-     * @param args The command-line arguments.
-     */
-    public static void main(String[] args) {
-        launch(args);
     }
 
     private Image getImage(String filename) {

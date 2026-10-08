@@ -19,7 +19,7 @@ public class StefanoConstants {
     public static final String RESULT_PREFIX = "#RESULT ";
     public static final String AVERAGE = "Moyenne              ";
     public static final String FAILED = "Erreurs              ";
-    public static final String SUCCESS = "Succès               ";
+    public static final String SUCCESS = "SuccÃ¨s               ";
     public static final String EXERCISES_COUNT = "Nombre d'exercices   ";
     public static final DecimalFormat decimalNumberFormat = new DecimalFormat("#,##0");
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");

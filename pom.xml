@@ -3,16 +3,16 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>sst.stefano</groupId>
 	<artifactId>stefano</artifactId>
-	<version>2026.004</version>
+	<version>2026.005</version>
 	<name>SST Stefano</name>
 	<description>SST Italian Vocabulary Exercise JavaFX Application</description>
 
 	<properties>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
-		<maven.compiler.encoding>CP1252</maven.compiler.encoding>
-		<project.build.sourceEncoding>CP1252</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>CP1252</project.reporting.outputEncoding>
+		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<lombok.version>1.18.48</lombok.version>
 		<javafx.version>17.0.14</javafx.version>
 		<logback.version>1.6.5</logback.version>

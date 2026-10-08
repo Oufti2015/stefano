@@ -15,6 +15,7 @@ public class ClassicWordFilter implements WordFilter {
             if (selector.isWordUnknown(word)) {
                 wordList.addUnknownWord(word);
             } else {
+                word.checkResult();
                 wordList.addKnownWord(word);
             }
         }

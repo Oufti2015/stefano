@@ -1,6 +1,7 @@
 package sst.stefano.data.filters;
 
 import sst.stefano.data.Word;
+import sst.stefano.main.StefanoConstants;
 
 public class AverageWordSelector extends WordSelector {
 
@@ -10,6 +11,8 @@ public class AverageWordSelector extends WordSelector {
 
     @Override
     public boolean isWordUnknown(Word word) {
-        return (word.getStat() < successAvg || word.getUsed() < (exerciseAvg / 2));
+        return word.getStat() < successAvg
+                || word.getUsed() < (exerciseAvg / 2)
+                || word.getStraight() < StefanoConstants.getINSTANCE().getStraightPivot();
     }
 }

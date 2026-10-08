@@ -114,13 +114,15 @@ public class WordList {
         return unknownWordList.size();
     }
 
-    public void success() {
+    public void success(boolean realSuccess) {
         currentStraight++;
         if (bestStraight < currentStraight) {
             bestStraight = currentStraight;
         }
-        currentWord.used();
-        currentWord.success();
+        if (realSuccess) {
+            currentWord.used();
+            currentWord.success();
+        }
     }
 
     public void failed() {

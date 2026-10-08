@@ -7,7 +7,6 @@ import sst.stefano.data.WordList;
 import java.util.Collection;
 
 public class HundredFirstRareWordsFilter implements WordFilter {
-
     @Override
     public double filter(WordList wordList) {
         Ordering<Word> usedOrdering = new Ordering<>() {
@@ -29,5 +28,4 @@ public class HundredFirstRareWordsFilter implements WordFilter {
         }
         return 0;
     }
-
 }
