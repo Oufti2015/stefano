@@ -345,7 +345,7 @@ public class Stefano extends Application {
             wordList.success(!proposal.equalsIgnoreCase(toSolutionLabel.getText()));
             currentWord.checkResult();
 
-            logger.info(" OK     : " + currentWord);
+            logger.info(" OK       : {}", currentWord.toString(false));
             updateLastWords();
         } else {
             proposeSameWord = true;
@@ -353,9 +353,9 @@ public class Stefano extends Application {
             resultLabel.setId("result-textfield-failed");
             wordList.failed();
 
-            logger.info("ERREUR : " + currentWord);
-            logger.info("Solution : " + currentWord.getItalien());
-            logger.info("Answer   : " + proposal);
+            logger.info(" ERREUR   : {}", currentWord);
+            logger.info(" Solution : {}", currentWord.getItalien());
+            logger.info(" Answer   : {}", proposal);
         }
 
         prevWordStatLabel.setText(currentWord.getWordStat());

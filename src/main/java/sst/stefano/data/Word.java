@@ -14,6 +14,7 @@ public class Word {
 
     @Getter
     private int used = 0, failed = 0, success = 0, straight = 0;
+    private int prevUsed = 0, prevFailed = 0, prevSuccess = 0, prevStraight = 0;
 
     @Getter
     @Setter
@@ -31,6 +32,11 @@ public class Word {
                 extractFrenchItalian(st.nextToken());
                 isFrenchItalian = false;
             } else {
+                prevUsed = -1;
+                prevFailed = -1;
+                prevSuccess = -1;
+                prevStraight = -1;
+
                 used = Integer.parseInt(st.nextToken());
                 failed = Integer.parseInt(st.nextToken());
                 success = Integer.parseInt(st.nextToken());
@@ -61,16 +67,23 @@ public class Word {
     }
 
     public void used() {
+        prevUsed = used;
         used++;
         specialWord = false;
     }
 
     public void failed() {
+        prevSuccess = success;
+        prevFailed = failed;
+        prevStraight = straight;
         failed++;
         straight = 0;
     }
 
     public void success() {
+        prevSuccess = success;
+        prevFailed = failed;
+        prevStraight = straight;
         success++;
         straight++;
         if (StefanoConstants.getINSTANCE().getStraightPivot() < straight && failed > 0) {
@@ -92,8 +105,19 @@ public class Word {
         return (0 == used) ? 0.00 : (double) success / (double) used;
     }
 
+    @Override
     public String toString() {
-        return francais + "=" + italien + "/" + used + "/" + failed + "/" + success + "/" + straight;
+        return toString(true);
+    }
+
+    public String toString(boolean toSave) {
+        String word = francais + "=" + italien;
+        String stat = used + "/" + failed + "/" + success + "/" + straight;
+        String previousStat = prevUsed + "/" + prevFailed + "/" + prevSuccess + "/" + prevStraight;
+        if (prevUsed != -1 && !toSave) {
+            stat += " (" + previousStat + ")";
+        }
+        return word + "/" + stat;
     }
 
     public void checkResult() {

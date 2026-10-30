@@ -45,5 +45,6 @@
 
 #from-special-label {
 	-fx-font: bold italic 18pt "Verdana";
+	-fx-background-color: yellow;
 	-fx-text-fill: rgb(80, 80, 0);
 }

@@ -12,7 +12,7 @@ public class AverageWordSelector extends WordSelector {
     @Override
     public boolean isWordUnknown(Word word) {
         return word.getStat() < successAvg
-                || word.getUsed() < (exerciseAvg / 2)
+                //|| word.getUsed() < (exerciseAvg / 2)
                 || word.getStraight() < StefanoConstants.getINSTANCE().getStraightPivot();
     }
 }
