@@ -83,9 +83,9 @@ public class Stefano extends Application {
         primaryStage.getIcons().add(getImage(StefanoConstants.IMG_ITALY_FLAG_ICON_24_PNG));
 
         // set title
-        primaryStage.setTitle(StefanoConstants.STEFANO_V_1_0);
-
-        logger.info(StefanoConstants.STEFANO_V_1_0);
+        String version = "Stefano v " + StefanoConstants.getAPIVersion();
+        primaryStage.setTitle(version);
+        logger.info(version);
 
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -342,7 +342,7 @@ public class Stefano extends Application {
         if (currentWord.getItalien().equalsIgnoreCase(proposal)) {
             resultLabel.setText("OK !");
             resultLabel.setId("result-textfield-ok");
-            wordList.success(!proposal.equalsIgnoreCase(toSolutionLabel.getText()));
+            wordList.success(!proposal.equalsIgnoreCase(toSolutionLabel.getText()) || 1 == wordList.getUnknownWordsListSize());
             currentWord.checkResult();
 
             logger.info(" OK       : {}", currentWord.toString(false));

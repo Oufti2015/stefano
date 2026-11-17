@@ -14,7 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.Properties;
 
 public class StefanoConstants {
-    public static final String STEFANO_V_1_0 = "Stefano v 2026.001";
     public static final String TMSTMP_PREFIX = "#TMSTMP ";
     public static final String RESULT_PREFIX = "#RESULT ";
     public static final String AVERAGE = "Moyenne              ";
@@ -29,7 +28,7 @@ public class StefanoConstants {
     public static final String IMG_ITALY_FLAG_ICON_24_PNG = "Img/Italy-Flag-icon-24.png";
     private static final String CONFIG_PROPERTIES = "Stefano.properties";
     private static final Logger logger = LoggerFactory.getLogger(StefanoConstants.class);
-    private static final String DICO_FILE_NAME = "data/dico.txt2";
+    private static final String DICO_FILE_NAME = "data/dico.txt";
     private static final int STRAIGHT_PIVOT = 10;
     @Getter
     private final static StefanoConstants INSTANCE = new StefanoConstants();
@@ -68,6 +67,20 @@ public class StefanoConstants {
         if (null != property) {
             straightPivot = Integer.parseInt(property);
             logger.info("Straight Pivot <{}>", straightPivot);
+        }
+    }
+
+    public static String getAPIVersion() {
+        String path = "/version.properties";
+        InputStream stream = StefanoConstants.class.getResourceAsStream(path);
+        if (stream == null) return "UNKNOWN";
+        Properties props = new Properties();
+        try {
+            props.load(stream);
+            stream.close();
+            return (String) props.get("version");
+        } catch (IOException e) {
+            return "UNKNOWN";
         }
     }
 }
