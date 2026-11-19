@@ -2,8 +2,7 @@ package sst.stefano.main;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import sst.stefano.data.WordList;
 
 import java.io.FileInputStream;
@@ -13,6 +12,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
 
+@Slf4j
 public class StefanoConstants {
     public static final String TMSTMP_PREFIX = "#TMSTMP ";
     public static final String RESULT_PREFIX = "#RESULT ";
@@ -27,7 +27,6 @@ public class StefanoConstants {
     public static final String CURRENT_STRAIGHT = "#CURRENT_STRAIGHT";
     public static final String IMG_ITALY_FLAG_ICON_24_PNG = "Img/Italy-Flag-icon-24.png";
     private static final String CONFIG_PROPERTIES = "Stefano.properties";
-    private static final Logger logger = LoggerFactory.getLogger(StefanoConstants.class);
     private static final String DICO_FILE_NAME = "data/dico.txt";
     private static final int STRAIGHT_PIVOT = 10;
     @Getter
@@ -49,7 +48,7 @@ public class StefanoConstants {
 
             init();
         } catch (IOException e) {
-            logger.error("Cannot load property file <" + CONFIG_PROPERTIES + ">", e);
+            log.error("Cannot load property file <" + CONFIG_PROPERTIES + ">", e);
         }
     }
 
@@ -61,12 +60,12 @@ public class StefanoConstants {
         String property = prop.getProperty("dico.filename");
         if (null != property) {
             dicoFileName = property;
-            logger.info("Loading Dico file <{}>", dicoFileName);
+            log.info("Loading Dico file <{}>", dicoFileName);
         }
         property = prop.getProperty("straight.pivot");
         if (null != property) {
             straightPivot = Integer.parseInt(property);
-            logger.info("Straight Pivot <{}>", straightPivot);
+            log.info("Straight Pivot <{}>", straightPivot);
         }
     }
 

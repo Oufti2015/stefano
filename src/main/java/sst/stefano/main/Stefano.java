@@ -16,9 +16,8 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
+import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import sst.stefano.data.Word;
 import sst.stefano.data.WordList;
 
@@ -27,12 +26,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Objects;
 
+@Slf4j
 public class Stefano extends Application {
 
     public static final int MAX_LAST_WORD_LIST = 10;
     private static final int RIGHT = 1;
     private static final int LEFT = 0;
-    private static final Logger logger = LoggerFactory.getLogger(Stefano.class);
     private final Label fromLabel = new Label("Français");
     private final Label toLabel = new Label("Italien");
     private final Label resultLabel = new Label("");
@@ -85,7 +84,7 @@ public class Stefano extends Application {
         // set title
         String version = "Stefano v " + StefanoConstants.getAPIVersion();
         primaryStage.setTitle(version);
-        logger.info(version);
+        log.info(version);
 
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -345,7 +344,7 @@ public class Stefano extends Application {
             wordList.success(!proposal.equalsIgnoreCase(toSolutionLabel.getText()) || 1 == wordList.getUnknownWordsListSize());
             currentWord.checkResult();
 
-            logger.info(" OK       : {}", currentWord.toString(false));
+            log.info(" OK       : {}", currentWord.toString(false));
             updateLastWords();
         } else {
             proposeSameWord = true;
@@ -353,9 +352,9 @@ public class Stefano extends Application {
             resultLabel.setId("result-textfield-failed");
             wordList.failed();
 
-            logger.info(" ERREUR   : {}", currentWord);
-            logger.info(" Solution : {}", currentWord.getItalien());
-            logger.info(" Answer   : {}", proposal);
+            log.info(" ERREUR   : {}", currentWord);
+            log.info(" Solution : {}", currentWord.getItalien());
+            log.info(" Answer   : {}", proposal);
         }
 
         prevWordStatLabel.setText(currentWord.getWordStat());
@@ -389,7 +388,7 @@ public class Stefano extends Application {
             FileInputStream fileInputStream = new FileInputStream(file);
             image = new Image(fileInputStream, 30, 30, true, true);
         } catch (FileNotFoundException e) {
-            logger.error("Cannot load image file <" + filename + ">, file=" + file, e);
+            log.error("Cannot load image file <" + filename + ">, file=" + file, e);
             System.exit(-RIGHT);
         }
         return image;

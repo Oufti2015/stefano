@@ -2,8 +2,7 @@ package sst.stefano.data;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import sst.stefano.data.filters.ClassicWordFilter;
 import sst.stefano.data.filters.HundredFirstRareWordsFilter;
 
@@ -12,10 +11,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+@Slf4j
 public class WordList {
     private static final int SPECIAL_WORD = 5;
 
-    private static final Logger logger = LoggerFactory.getLogger(WordList.class);
     private static final DecimalFormat decimalFormat = new DecimalFormat("#0.00");
     private final HashMap<Integer, Word> list = new HashMap<>();
     private final ArrayList<String> frenchList = new ArrayList<>();
@@ -40,7 +39,7 @@ public class WordList {
 
     private boolean checkForDuplicate(Word word) {
         if (frenchList.contains(word.getFrancais()) || italianList.contains(word.getItalien())) {
-            logger.warn("Word <{}> is duplicate.", word);
+            log.warn("Word <{}> is duplicate.", word);
             return false;
         }
         return true;
@@ -58,7 +57,7 @@ public class WordList {
         if (SPECIAL_WORD == j) {
             Integer i = (((int) (Math.random() * 1000)) % knownWordList.size()) + 1;
             currentWord = knownWordList.get(i);
-            logger.info("******** SPECIAL WORD ********");
+            log.info("******** SPECIAL WORD ********");
             currentWord.setSpecialWord(true);
         } else if (0 < getUnknownWordsListSize()) {
             Integer i = (((int) (Math.random() * 1000)) % getUnknownWordsListSize()) + 1;
@@ -95,7 +94,7 @@ public class WordList {
         if (unknownWordList.isEmpty()) {
             new HundredFirstRareWordsFilter().filter(this);
         }
-        logger.info("Average usage = {} ({}) / Words in List = {} / Unknown words in List = {}", decimalFormat.format(exerciseAvg), decimalFormat.format(exerciseAvg / 2), getWordsListSize(), getUnknownWordsListSize());
+        log.info("Average usage = {} ({}) / Words in List = {} / Unknown words in List = {}", decimalFormat.format(exerciseAvg), decimalFormat.format(exerciseAvg / 2), getWordsListSize(), getUnknownWordsListSize());
     }
 
     public void addKnownWord(Word word) {

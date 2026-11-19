@@ -1,8 +1,7 @@
 package sst.stefano.main;
 
 import com.google.common.collect.Ordering;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import sst.stefano.data.Word;
 import sst.stefano.data.WordList;
 
@@ -14,8 +13,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+@Slf4j
 public class DicoFileManager {
-    private static final Logger logger = LoggerFactory.getLogger(DicoFileManager.class);
 
     private final ArrayList<String> ignoredLine = new ArrayList<>();
 
@@ -56,7 +55,7 @@ public class DicoFileManager {
             // Close the input stream
             inputStreamReader.close();
         } catch (Exception e) {// Catch exception if any
-            logger.error("Cannot load file {}", StefanoConstants.getINSTANCE().getDicoFileName(), e);
+            log.error("Cannot load file {}", StefanoConstants.getINSTANCE().getDicoFileName(), e);
             System.exit(-1);
         }
         return wordList;
@@ -96,7 +95,7 @@ public class DicoFileManager {
             // outputStreamWriter.close();
             bufferedWriter.close();
         } catch (Exception e) {// Catch exception if any
-            logger.error("Cannot save file {}", StefanoConstants.getINSTANCE().getDicoFileName(), e);
+            log.error("Cannot save file {}", StefanoConstants.getINSTANCE().getDicoFileName(), e);
             System.exit(-1);
         }
     }
