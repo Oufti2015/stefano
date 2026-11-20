@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>sst.stefano</groupId>
 	<artifactId>stefano</artifactId>
-	<version>2026.010</version>
+	<version>2026.011</version>
 	<name>SST Stefano</name>
 	<description>SST Italian Vocabulary Exercise JavaFX Application</description>
 
@@ -15,7 +15,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<lombok.version>1.18.48</lombok.version>
 		<javafx.version>17.0.14</javafx.version>
-		<logback.version>1.6.5</logback.version>
+		<logback.version>1.6.7</logback.version>
 		<junit.version>6.1.3</junit.version>
 	</properties>
 
@@ -81,8 +81,7 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>33.7.2-jre</version>
-			<scope>compile</scope>
+			<version>33.8.0-jre</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.squareup/javawriter -->
 		<dependency>
@@ -106,7 +105,6 @@
 			<artifactId>javafx-fxml</artifactId>
 			<version>${javafx.version}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
 		<!-- Source: https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
