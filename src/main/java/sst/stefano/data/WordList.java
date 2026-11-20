@@ -47,23 +47,23 @@ public class WordList {
 
     public Word random() {
         filterWords();
-
-        int j = (((int) (Math.random() * 1000)) % 10) + 1;
+        int maxRandom = 1000 * list.size();
+        int j = (((int) (Math.random() * maxRandom)) % 10) + 1;
 
         if (null == currentWord && 1 == getUnknownWordsListSize() && unknownWordList.containsValue(currentWord)) {
             j = SPECIAL_WORD;
         }
 
         if (SPECIAL_WORD == j) {
-            Integer i = (((int) (Math.random() * 1000)) % knownWordList.size()) + 1;
+            Integer i = (((int) (Math.random() * maxRandom)) % knownWordList.size()) + 1;
             currentWord = knownWordList.get(i);
             log.info("******** SPECIAL WORD ********");
             currentWord.setSpecialWord(true);
         } else if (0 < getUnknownWordsListSize()) {
-            Integer i = (((int) (Math.random() * 1000)) % getUnknownWordsListSize()) + 1;
+            Integer i = (((int) (Math.random() * maxRandom)) % getUnknownWordsListSize()) + 1;
             currentWord = unknownWordList.get(i);
         } else {
-            Integer i = (((int) (Math.random() * 1000)) % getWordsListSize()) + 1;
+            Integer i = (((int) (Math.random() * maxRandom)) % getWordsListSize()) + 1;
             currentWord = list.get(i);
         }
 
@@ -128,5 +128,16 @@ public class WordList {
         currentStraight = 0;
         currentWord.used();
         currentWord.failed();
+    }
+
+    public boolean isWordInUnknownList(Word word) {
+        return unknownWordList.containsValue(word);
+    }
+
+    public void showUnknownWords() {
+        log.info("Unknown words in list:");
+        for (Word word : unknownWordList.values()) {
+            log.info("{}", word);
+        }
     }
 }

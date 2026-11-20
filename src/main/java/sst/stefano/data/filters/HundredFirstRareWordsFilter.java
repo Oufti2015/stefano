@@ -4,28 +4,39 @@ import com.google.common.collect.Ordering;
 import sst.stefano.data.Word;
 import sst.stefano.data.WordList;
 
-import java.util.Collection;
+import java.util.List;
 
 public class HundredFirstRareWordsFilter implements WordFilter {
     @Override
     public double filter(WordList wordList) {
+        return filter(wordList, 100);
+    }
+
+    public double filter(WordList wordList, int listSize) {
         Ordering<Word> usedOrdering = new Ordering<>() {
             public int compare(Word left, Word right) {
                 assert left != null;
                 assert right != null;
-                return Integer.compare(left.getUsed(), right.getUsed());
+                int compare = Integer.compare(left.getUsed(), right.getUsed());
+                if (compare == 0) {
+                    compare = Integer.compare(left.getStraight(), right.getStraight());
+                }
+                return compare;
             }
         };
         int i = 0;
-        Collection<Word> list = usedOrdering.sortedCopy(wordList.getWords());
+        List<Word> list = usedOrdering.sortedCopy(wordList.getWords());
         for (Word word : list) {
-            if (i < 100) {
-                wordList.addUnknownWord(word);
+            if (i < listSize) {
+                if (!wordList.isWordInUnknownList(word)) {
+                    wordList.addUnknownWord(word);
+                    i++;
+                }
             } else {
                 wordList.addKnownWord(word);
             }
-            i++;
         }
+
         return 0;
     }
 }

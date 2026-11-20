@@ -20,6 +20,10 @@ public class ClassicWordFilter implements WordFilter {
             }
         }
 
+        if (wordList.getUnknownWordsListSize() > 0 && wordList.getUnknownWordsListSize() <= 25) {
+            new HundredFirstRareWordsFilter().filter(wordList, 25 - wordList.getUnknownWordsListSize());
+        }
+
         return exerciseAvg;
     }
 }
